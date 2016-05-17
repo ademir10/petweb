@@ -59,15 +59,15 @@
                 <ul class="dropdown-menu">
                 	
                 <%if current_user.ccli == true %>
-                <li><%= link_to 'Clientes', '#' %></li>
+                <li><%= link_to 'Clientes', clients_path %></li>
                 <% end %> 	
 
                 <% if current_user.csuplier == true %>	
-                <li><%= link_to "Fornecedores", '#' %></li>
+                <li><%= link_to "Fornecedores", suppliers_path %></li>
                 <% end %>
                 
                 <% if current_user.cprod == true %>	
-                <li><%= link_to "Produtos", '#' %></li>
+                <li><%= link_to "Produtos", products_path %></li>
                 <% end %>
                                                               
                 <% if current_user.cuser == true && current_user.type_access == 'User' %>
@@ -88,6 +88,10 @@
                 
                 <% if current_user.mout == true %>	
                 <li><%= link_to "Saida de toalhas", '#' %></li>
+                <% end %>
+                
+                <% if current_user.mlog == true %>	
+                <li><%= link_to "Log de atividades", loginfos_path %></li>
                 <% end %>
                 </ul>
            	<li class="dropdown">
@@ -114,15 +118,15 @@
                 <li class="dropdown-header">Gerais</li>
                 
                 <%if current_user.rcli == true %>
-                <li><%= link_to "Clientes", '#' %></li>
+                <li><%= link_to "Clientes", report_client_path %></li>
                 <% end %>
                 
                 <%if current_user.rsuplier == true %>
-                <li><%= link_to "Fornecedores", '#' %></li>
+                <li><%= link_to "Fornecedores", report_supplier_path %></li>
                 <% end %>
                 
                 <%if current_user.rprod == true %>
-                <li><%= link_to "Produtos", '#' %></li>
+                <li><%= link_to "Produtos", report_product_path %></li>
                 <% end %>
                 
                 <li role="separator" class="divider"></li>

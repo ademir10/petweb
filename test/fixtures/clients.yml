@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: MyString
+  name: MyString
+  address: MyString
+  neighborhood: MyString
+  cidade_id: 
+  estado_id: 
+  cep: MyString
+  phone: MyString
+  cellphone: MyString
+  email: MyString
+  cnpj: MyString
+  nf: MyString
+  val1: 9.99
+  val2: 9.99
+  val3: 9.99
+  val4: 9.99
+  val5: 9.99
+
+two:
+  company: MyString
+  name: MyString
+  address: MyString
+  neighborhood: MyString
+  cidade_id: 
+  estado_id: 
+  cep: MyString
+  phone: MyString
+  cellphone: MyString
+  email: MyString
+  cnpj: MyString
+  nf: MyString
+  val1: 9.99
+  val2: 9.99
+  val3: 9.99
+  val4: 9.99
+  val5: 9.99

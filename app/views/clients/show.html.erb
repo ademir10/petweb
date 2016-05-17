@@ -1,0 +1,53 @@
+<%- model_class = Client -%>
+<div class="page-header">
+  <h1>Dados do Cliente</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name('cliente') %>:</strong></dt>
+  <dd><%= @client.company %></dd>
+  <dt><strong><%= model_class.human_attribute_name('responsavel') %>:</strong></dt>
+  <dd><%= @client.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name('endereço') %>:</strong></dt>
+  <dd><%= @client.address %></dd>
+  <dt><strong><%= model_class.human_attribute_name('bairro') %>:</strong></dt>
+  <dd><%= @client.neighborhood %></dd>
+  <dt><strong><%= model_class.human_attribute_name('cidade') %>:</strong></dt>
+  <dd><%= @client.cidade.nome %></dd>
+  <dt><strong><%= model_class.human_attribute_name('estado') %>:</strong></dt>
+  <dd><%= @client.estado.sigla %></dd>
+  <dt><strong><%= model_class.human_attribute_name('cep') %>:</strong></dt>
+  <dd><%= @client.cep %></dd>
+  <dt><strong><%= model_class.human_attribute_name('fone') %>:</strong></dt>
+  <dd><%= @client.phone %></dd>
+  <dt><strong><%= model_class.human_attribute_name('celular') %>:</strong></dt>
+  <dd><%= @client.cellphone %></dd>
+  <dt><strong><%= model_class.human_attribute_name('email') %>:</strong></dt>
+  <dd><%= @client.email %></dd>
+  <dt><strong><%= model_class.human_attribute_name('cnpj') %>:</strong></dt>
+  <dd><%= @client.cnpj %></dd>
+  <dt><strong><%= model_class.human_attribute_name('NF') %>:</strong></dt>
+  <dd><%= @client.nf %></dd>
+  <dt><strong><%= model_class.human_attribute_name('Qnt estoque') %>:</strong></dt>
+  <dd><%= @client.qnt %></dd>
+  <dt><strong><%= model_class.human_attribute_name('R$ até 10 toalhas') %>:</strong></dt>
+  <dd><%= @client.val1 %></dd>
+  <dt><strong><%= model_class.human_attribute_name('R$ de 11 á 20 toalhas') %>:</strong></dt>
+  <dd><%= @client.val2 %></dd>
+  <dt><strong><%= model_class.human_attribute_name('R$ de 21 á 30 toalhas') %>:</strong></dt>
+  <dd><%= @client.val3 %></dd>
+  <dt><strong><%= model_class.human_attribute_name('R$ de 31 á 40 toalhas') %>:</strong></dt>
+  <dd><%= @client.val4 %></dd>
+  <dt><strong><%= model_class.human_attribute_name('R$ acima de 40 toalhas') %>:</strong></dt>
+  <dd><%= @client.val5 %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              clients_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_client_path(@client), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              client_path(@client),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

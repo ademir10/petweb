@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160517015014) do
+ActiveRecord::Schema.define(version: 20160517210802) do
 
   create_table "cidades", force: :cascade do |t|
     t.string   "nome"
@@ -21,6 +21,32 @@ ActiveRecord::Schema.define(version: 20160517015014) do
   end
 
   add_index "cidades", ["estado_id"], name: "index_cidades_on_estado_id", using: :btree
+
+  create_table "clients", force: :cascade do |t|
+    t.string   "company"
+    t.string   "name"
+    t.string   "address"
+    t.string   "neighborhood"
+    t.integer  "cidade_id"
+    t.integer  "estado_id"
+    t.string   "cep"
+    t.string   "phone"
+    t.string   "cellphone"
+    t.string   "email"
+    t.string   "cnpj"
+    t.string   "nf"
+    t.decimal  "val1"
+    t.decimal  "val2"
+    t.decimal  "val3"
+    t.decimal  "val4"
+    t.decimal  "val5"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "qnt"
+  end
+
+  add_index "clients", ["cidade_id"], name: "index_clients_on_cidade_id", using: :btree
+  add_index "clients", ["estado_id"], name: "index_clients_on_estado_id", using: :btree
 
   create_table "estados", force: :cascade do |t|
     t.string   "sigla"
@@ -51,6 +77,35 @@ ActiveRecord::Schema.define(version: 20160517015014) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "products", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "suppliers", force: :cascade do |t|
+    t.string   "company"
+    t.string   "name"
+    t.string   "address"
+    t.string   "neighborhood"
+    t.integer  "cidade_id"
+    t.integer  "estado_id"
+    t.string   "cep"
+    t.string   "phone"
+    t.string   "cellphone"
+    t.string   "email"
+    t.string   "cnpj"
+    t.string   "bank"
+    t.string   "agency"
+    t.string   "acount"
+    t.string   "favored"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "suppliers", ["cidade_id"], name: "index_suppliers_on_cidade_id", using: :btree
+  add_index "suppliers", ["estado_id"], name: "index_suppliers_on_estado_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
@@ -72,6 +127,11 @@ ActiveRecord::Schema.define(version: 20160517015014) do
     t.boolean  "rsale"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.boolean  "mlog"
   end
 
+  add_foreign_key "clients", "cidades"
+  add_foreign_key "clients", "estados"
+  add_foreign_key "suppliers", "cidades"
+  add_foreign_key "suppliers", "estados"
 end

@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :products
+  resources :suppliers
+  resources :clients
   resources :loginfos
     resources :expire_dates
   resources :users
@@ -24,8 +27,13 @@ Rails.application.routes.draw do
   #---------------------------------------------
   
   #relatórios
-  #grafico de vendas anual exemplo
-  get 'sales_report', to: 'pages#sales_report'
+  #relatorio de clientes
+  get 'report_client', to: 'clients#report_client'
+  #relatorio de fornecedores
+  get 'report_supplier', to: 'suppliers#report_supplier'
+  #relatorio de produtos
+  get 'report_product', to: 'products#report_product'
+  
       
   #para carregar a view informando que não pode excluir cadastro com relacionamento em outra table
   get 'message_error_relation_tables', to: 'messages#message_error_relation_tables'

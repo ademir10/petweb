@@ -1,8 +1,3 @@
-<html>
-<body background="">
-
- <div class="jumbotron">
-
 <% if !logged_in? %>
      	    	
     <div style="background: url('images/banner1.jpg')no-repeat center; height: 400px;
@@ -19,15 +14,13 @@
       </div>
 
 <% else %> 
-<div class="container" align="center">
-<%= image_tag "logo_mini.png" %>
-
-
-
-  </div>
+<div style="background: url('images/intro.jpg')no-repeat center; height: 400px;
+    background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -webkit-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    color: #FFF;" class="jumbotron">
+    </div>
 <% end %> 
-
-
-</div>
-</body>
-</html>
+ 
+<p>&copy; <%= @date %> - D&D Support Service - Consultoria em T.I.</p>
