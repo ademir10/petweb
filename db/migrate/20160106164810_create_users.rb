@@ -13,8 +13,8 @@ class CreateUsers < ActiveRecord::Migration
       
       t.boolean :min
       t.boolean :mout
+      t.boolean :mlog
      
-      
       t.boolean :fpag
       t.boolean :frec
       t.boolean :rcli

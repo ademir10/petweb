@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160517210802) do
+ActiveRecord::Schema.define(version: 20160518135253) do
 
   create_table "cidades", force: :cascade do |t|
     t.string   "nome"
@@ -35,14 +35,8 @@ ActiveRecord::Schema.define(version: 20160517210802) do
     t.string   "email"
     t.string   "cnpj"
     t.string   "nf"
-    t.decimal  "val1"
-    t.decimal  "val2"
-    t.decimal  "val3"
-    t.decimal  "val4"
-    t.decimal  "val5"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.integer  "qnt"
   end
 
   add_index "clients", ["cidade_id"], name: "index_clients_on_cidade_id", using: :btree
@@ -76,6 +70,22 @@ ActiveRecord::Schema.define(version: 20160517210802) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "prod_clis", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "product_id"
+    t.integer  "qnt"
+    t.decimal  "val1"
+    t.decimal  "val2"
+    t.decimal  "val3"
+    t.decimal  "val4"
+    t.decimal  "val5"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "prod_clis", ["client_id"], name: "index_prod_clis_on_client_id", using: :btree
+  add_index "prod_clis", ["product_id"], name: "index_prod_clis_on_product_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "name"
@@ -117,6 +127,7 @@ ActiveRecord::Schema.define(version: 20160517210802) do
     t.boolean  "cuser"
     t.boolean  "min"
     t.boolean  "mout"
+    t.boolean  "mlog"
     t.boolean  "fpag"
     t.boolean  "frec"
     t.boolean  "rcli"
@@ -127,11 +138,12 @@ ActiveRecord::Schema.define(version: 20160517210802) do
     t.boolean  "rsale"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.boolean  "mlog"
   end
 
   add_foreign_key "clients", "cidades"
   add_foreign_key "clients", "estados"
+  add_foreign_key "prod_clis", "clients"
+  add_foreign_key "prod_clis", "products"
   add_foreign_key "suppliers", "cidades"
   add_foreign_key "suppliers", "estados"
 end

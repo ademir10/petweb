@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   resources :products
   resources :suppliers
-  resources :clients
+  
+  resources :clients do
+    resources :prod_clis
+  end
+  resources :prod_clis
+  
   resources :loginfos
     resources :expire_dates
   resources :users

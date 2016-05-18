@@ -13,11 +13,6 @@ class CreateClients < ActiveRecord::Migration
       t.string :email
       t.string :cnpj
       t.string :nf
-      t.decimal :val1
-      t.decimal :val2
-      t.decimal :val3
-      t.decimal :val4
-      t.decimal :val5
 
       t.timestamps null: false
     end

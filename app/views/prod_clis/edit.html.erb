@@ -1,0 +1,78 @@
+<h1>Editar produto</h1>
+<%= form_for @prod_cli, :html => { :class => "form-horizontal prod_cli" } do |f| %>
+
+  <% if @prod_cli.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@prod_cli.errors.count, "error") %> prohibited this prod_cli from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @prod_cli.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  
+    <div class="form-group">
+    <%= f.label 'produto', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :product_id, :value => @product, :class => 'form-control', disabled: true %>
+    </div>
+    <%=f.error_span(:qnt) %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label 'Estoque', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-1">
+      <%= f.number_field :qnt, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:qnt) %>
+  </div>
+  <div class="form-group">
+    <%= f.label '10T R$', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-1">
+      <%= f.text_field :val1, :class => 'form-control', id: 'r1' %>
+    </div>
+    <%=f.error_span(:val1) %>
+  </div>
+  <div class="form-group">
+    <%= f.label '11/20T R$', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-1">
+      <%= f.text_field :val2, :class => 'form-control', id: 'r2' %>
+    </div>
+    <%=f.error_span(:val2) %>
+  </div>
+  <div class="form-group">
+    <%= f.label '21/30T R$', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-1">
+      <%= f.text_field :val3, :class => 'form-control', id: 'r3' %>
+    </div>
+    <%=f.error_span(:val3) %>
+  </div>
+  <div class="form-group">
+    <%= f.label '31/40T R$', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-1">
+      <%= f.text_field :val4, :class => 'form-control', id: 'r4' %>
+    </div>
+    <%=f.error_span(:val4) %>
+  </div>
+  <div class="form-group">
+    <%= f.label '+ 40T R$', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-1">
+      <%= f.text_field :val5, :class => 'form-control', id: 'r5' %>
+    </div>
+    <%=f.error_span(:val5) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit 'Salvar', :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                clients_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+
+<% end %>

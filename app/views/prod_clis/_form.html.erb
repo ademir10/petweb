@@ -1,0 +1,49 @@
+<hr />
+<h4>Adicionar Produto ao cliente</h4>
+
+<%= form_for ([@client, @client.prod_clis.build]) do |f| %>
+
+<% if @client.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@client.errors.count, "error") %> prohibited this heritage from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @client.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  
+    <div class="col-lg-5">	
+	<%= f.collection_select(:product_id, @products, :id, :name, {include_blank: 'Selecione o produto'},:class => 'form-control') %>
+	</div>
+   
+    <div class="col-lg-1">
+	<%= f.number_field :qnt, class: "form-control" -%>
+	</div>
+	<div class="col-lg-1">
+	<%= f.text_field :val1, class: "form-control", placeholder: "10", id: 'r1' -%>
+	</div>
+	<div class="col-lg-1">
+	<%= f.text_field :val2, class: "form-control", placeholder: "11/20", id: 'r2' -%>
+	</div>
+	<div class="col-lg-1">
+	<%= f.text_field :val3, class: "form-control", placeholder: "21/30", id: 'r3' -%>
+	</div>
+	<div class="col-lg-1">
+	<%= f.text_field :val4, class: "form-control", placeholder: "31/40", id: 'r4' -%>
+	</div>
+	<div class="col-lg-1">
+	<%= f.text_field :val5, class: "form-control", placeholder: "+40", id: 'r5' -%>
+	</div>
+		
+    <%= f.submit 'Adicionar', class: 'btn btn-primary' %>
+    
+<% end %>
+
+
+

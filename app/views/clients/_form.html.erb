@@ -99,49 +99,7 @@
     </div>
     <%=f.error_span(:nf) %>
   </div>
-  <div class="form-group">
-    <%= f.label 'Qnt estoque', :class => 'control-label col-lg-2' %>
-    <div class="col-lg-1">
-      <%= f.number_field :qnt, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:qnt) %>
-  </div>
-  <div class="form-group">
-    <%= f.label 'até 10 toalhas R$', :class => 'control-label col-lg-2' %>
-    <div class="col-lg-2">
-      <%= f.text_field :val1, :class => 'form-control', id: 'r1' %>
-    </div>
-    <%=f.error_span(:val1) %>
-  </div>
-  <div class="form-group">
-    <%= f.label 'de 11 á 20 toalhas R$', :class => 'control-label col-lg-2' %>
-    <div class="col-lg-2">
-      <%= f.text_field :val2, :class => 'form-control', id: 'r2' %>
-    </div>
-    <%=f.error_span(:val2) %>
-  </div>
-  <div class="form-group">
-    <%= f.label 'de 21 á 30 toalhas R$', :class => 'control-label col-lg-2' %>
-    <div class="col-lg-2">
-      <%= f.text_field :val3, :class => 'form-control', id: 'r3' %>
-    </div>
-    <%=f.error_span(:val3) %>
-  </div>
-  <div class="form-group">
-    <%= f.label 'de 31 á 40 toalhas R$', :class => 'control-label col-lg-2' %>
-    <div class="col-lg-2">
-      <%= f.text_field :val4, :class => 'form-control', id: 'r4' %>
-    </div>
-    <%=f.error_span(:val4) %>
-  </div>
-  <div class="form-group">
-    <%= f.label '+ de 40 toalhas R$', :class => 'control-label col-lg-2' %>
-    <div class="col-lg-2">
-      <%= f.text_field :val5, :class => 'form-control', id: 'r5' %>
-    </div>
-    <%=f.error_span(:val5) %>
-  </div>
-
+  
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
       <%= f.submit 'Salvar', :class => 'btn btn-primary' %>

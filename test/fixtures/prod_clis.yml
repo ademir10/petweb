@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client_id: 
+  product_id: 
+  qnt: 1
+  val1: 9.99
+  val2: 9.99
+  val3: 9.99
+  val4: 9.99
+  val5: 9.99
+
+two:
+  client_id: 
+  product_id: 
+  qnt: 1
+  val1: 9.99
+  val2: 9.99
+  val3: 9.99
+  val4: 9.99
+  val5: 9.99
