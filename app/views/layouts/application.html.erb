@@ -99,7 +99,7 @@
                 <ul class="dropdown-menu">
                                 
                 <% if current_user.fpag == true %>	
-                <li><%= link_to "Contas á pagar", '#' %></li>
+                <li><%= link_to "Contas á pagar", payments_path %></li>
                 <% end %>
                 
                 <% if current_user.frec == true %>	
@@ -132,7 +132,7 @@
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Financeiro</li>
                 <%if current_user.rpag == true %>
-                <li><%= link_to "Contas á Pagar", '#' %></li>
+                <li><%= link_to "Contas á Pagar", report_payment_path %></li>
                 <% end %>
                 
                 <%if current_user.rrec == true %>

@@ -25,7 +25,7 @@ class ProdClisController < ApplicationController
        #inserindo no log de atividades
         log = Loginfo.new(params[:loginfo])
         log.employee = current_user.name
-        log.task = 'Adicionou produto ao cliente: ' + product_params[@client.name].to_s
+        log.task = 'Adicionou produto ao cliente: ' + @client.company.to_s
         log.save!
        
       @prod_cli = @client.prod_clis.create(prod_cli_params)

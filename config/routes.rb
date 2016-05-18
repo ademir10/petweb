@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :payments
   resources :products
   resources :suppliers
   
@@ -38,6 +39,8 @@ Rails.application.routes.draw do
   get 'report_supplier', to: 'suppliers#report_supplier'
   #relatorio de produtos
   get 'report_product', to: 'products#report_product'
+  #relatorio de contas a pagar
+  get 'report_payment', to: 'payments#report_payment'
   
       
   #para carregar a view informando que não pode excluir cadastro com relacionamento em outra table
