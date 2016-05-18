@@ -93,6 +93,11 @@ class PaymentsController < ApplicationController
     
             respond_to do |format|
               if @payment.save
+                #inserindo no log de atividades
+        log = Loginfo.new(params[:loginfo])
+        log.employee = current_user.name
+        log.task = 'Cadastrou nova conta á pagar - Nº doc: ' + payment_params[:doc_number].to_s
+        log.save!
                 format.html { redirect_to @payment, notice: 'Pagamento cadastrado com sucesso.' }
                 format.json { render :show, status: :created, location: @payment }
               else
@@ -154,6 +159,11 @@ class PaymentsController < ApplicationController
      
     respond_to do |format|
       if @payment.update(payment_params)
+        #inserindo no log de atividades
+        log = Loginfo.new(params[:loginfo])
+        log.employee = current_user.name
+        log.task = 'Atualizou conta á pagar - Nº doc ' + payment_params[:doc_number].to_s
+        log.save!
         format.html { redirect_to @payment, notice: 'Pagamento atualizado com sucesso.' }
         format.json { render :show, status: :ok, location: @payment }
       else
@@ -167,6 +177,11 @@ class PaymentsController < ApplicationController
   # DELETE /payments/1.json
   def destroy
     @payment.destroy
+    #inserindo no log de atividades
+        log = Loginfo.new(params[:loginfo])
+        log.employee = current_user.name
+        log.task = 'Excluiu conta á pagar - Nº doc ' + @payment.doc_number.to_s
+        log.save!
     respond_to do |format|
       format.html { redirect_to payments_url, notice: 'Pagamento excluido com sucesso.' }
       format.json { head :no_content }
