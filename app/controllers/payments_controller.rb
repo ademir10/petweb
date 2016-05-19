@@ -87,6 +87,25 @@ class PaymentsController < ApplicationController
   def create
     @payment = Payment.new(payment_params)
     @qnt_parcela = payment_params[:installments].to_i
+    
+    #verifica se foi informada a forma de pagamento na baixa
+    if payment_params[:form_payment].blank?
+      flash[:warning] = 'Selecione uma forma de Pagamento!'
+      redirect_to new_payment_path and return
+    end
+    
+    #se informou a data da baixa e não alterou para PAGA o status
+    if payment_params[:payment_date].present? && payment_params[:status] == 'Á PAGAR'
+    flash[:warning] = 'Altere o Status para PAGA, já que você informou a data de pagamento!'
+      redirect_to new_payment_path and return
+    end
+    
+    #se alterou para PAGA o status e não informou a data do pagamento
+    if payment_params[:status] == 'PAGA' && payment_params[:payment_date].blank?
+    flash[:warning] = 'Informe a data de pagamento, já que você alerou o status para PAGA!'
+      redirect_to new_payment_path and return
+    end
+    
       
     #se for somente uma parcela ele só salva uma vez
     if @qnt_parcela == 1
@@ -200,6 +219,6 @@ class PaymentsController < ApplicationController
     end
     #mostra o nome do fornecedor
     def show_supplier_name
-      @suppliers = Supplier.order(:name)
+      @suppliers = Supplier.order(:company)
     end
 end

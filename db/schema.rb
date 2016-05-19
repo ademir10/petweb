@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518193040) do
+ActiveRecord::Schema.define(version: 20160519142112) do
 
   create_table "cidades", force: :cascade do |t|
     t.string   "nome"
@@ -58,6 +58,30 @@ ActiveRecord::Schema.define(version: 20160518193040) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "intowels", force: :cascade do |t|
+    t.integer  "client_id"
+    t.string   "form_receipt"
+    t.integer  "installments"
+    t.string   "status"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "intowels", ["client_id"], name: "index_intowels_on_client_id", using: :btree
+
+  create_table "items", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "qnt"
+    t.decimal  "sale_value"
+    t.decimal  "total_value"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "intowel_id"
+  end
+
+  add_index "items", ["intowel_id"], name: "index_items_on_intowel_id", using: :btree
+  add_index "items", ["product_id"], name: "index_items_on_product_id", using: :btree
 
   create_table "loginfos", force: :cascade do |t|
     t.string   "employee"
@@ -159,6 +183,9 @@ ActiveRecord::Schema.define(version: 20160518193040) do
 
   add_foreign_key "clients", "cidades"
   add_foreign_key "clients", "estados"
+  add_foreign_key "intowels", "clients"
+  add_foreign_key "items", "intowels"
+  add_foreign_key "items", "products"
   add_foreign_key "payments", "suppliers"
   add_foreign_key "prod_clis", "clients"
   add_foreign_key "prod_clis", "products"

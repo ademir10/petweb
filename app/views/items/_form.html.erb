@@ -1,0 +1,117 @@
+<script>
+// AQUI É FEITA A CONSULTA COM BASE NO PRODUTO SELECIONADO NO COMBOBOX E EXIBIDO NOS TEXTFIELDS O RESULTADO
+$(document).ready(function() {
+    $("#selectprod").change(function(){
+  	// limpa os campos primeiro
+  	$("#val_unit").val('');
+  	$("#val_total").val('');
+     
+    	$.ajax({
+    		url: '/consulta_prod.json',
+    		data: {
+    			product: $("#selectprod option:selected").text(),
+    		    client_id: $("#client").val(),
+    		    	
+     		},
+    		datatype: "script",
+    		
+    		success: function(obj){
+        	$('#v1').val(obj.val1);
+        	$('#v2').val(obj.val2);
+        	$('#v3').val(obj.val3);
+        	$('#v4').val(obj.val4);
+        	$('#v5').val(obj.val5);
+     
+     //ATÉ 10 TOALHAS   	
+     if ( $('#quant').val() <= 10 ) {
+      $('#val_unit').val(obj.val1);	
+     var total = $('#quant').val() * $('#val_unit').val();
+      $('#val_total').val(total.toFixed(2));	
+    }
+    //DE 11 Á 20 TOALHAS
+    if ( $('#quant').val() >= 11 && $('#quant').val() <= 20 ) {
+      $('#val_unit').val(obj.val2);	
+     var total = $('#quant').val() * $('#val_unit').val();
+      $('#val_total').val(total.toFixed(2));	
+    } 
+    //DE 21 Á 30 TOALHAS
+    if ( $('#quant').val() >= 21 && $('#quant').val() <= 30 ) {
+      $('#val_unit').val(obj.val3);	
+     var total = $('#quant').val() * $('#val_unit').val();
+      $('#val_total').val(total.toFixed(2));	
+    }
+    //DE 31 Á 40 TOALHAS
+    if ( $('#quant').val() >= 31 && $('#quant').val() <= 40 ) {
+      $('#val_unit').val(obj.val4);	
+     var total = $('#quant').val() * $('#val_unit').val();
+      $('#val_total').val(total.toFixed(2));	
+    }
+    //MAIS DE 40 TOALHAS
+    if ( $('#quant').val() > 40 ) {
+      $('#val_unit').val(obj.val5);	
+     var total = $('#quant').val() * $('#val_unit').val();
+      $('#val_total').val(total.toFixed(2));	
+    }   
+       	
+        },
+        error: function(){
+            console.log(arguments);
+        }
+	   	});
+   	});
+ });
+</script>
+
+<script>
+$(document).ready(function(){
+$('#quant').change(function(){
+     $("#selectprod").val('');
+     $("#val_unit").val('');
+     $("#val_total").val('');
+  	
+});
+});
+</script>
+
+<h5>Adicionar item</h5>
+<%= form_for ([@intowel, @intowel.items.build]) do |f| %>
+
+<% if @intowel.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@intowel.errors.count, "error") %> prohibited this heritage from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @intowel.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  
+  <%= f.hidden_field :client_id, :value => @intowel.client_id, id: 'client' %>
+  
+  <div class="col-lg-1">
+	<%= f.number_field :qnt, class: "form-control", placeholder: "qnt", id: 'quant' -%>
+	</div>
+	
+	<div class="col-lg-3">
+    <%= f.collection_select(:product_id, @products, :id, :name, {include_blank: 'Selecione o item'},:class => 'form-control', id: 'selectprod') %>
+    </div>
+    	
+	<div class="col-lg-2">
+	<%= f.text_field :sale_value, class: "form-control", placeholder: "Val unitário R$", disabled: true, id: 'val_unit' %>
+	</div>
+	
+	<div class="col-lg-2">
+	<%= f.text_field :total_value, class: "form-control", placeholder: "Val total R$",disabled: true, id: 'val_total' %>
+	</div>
+	
+    <%= f.submit 'Adicionar', class: 'btn btn-primary' %>
+       
+<% end %>
+
+
+

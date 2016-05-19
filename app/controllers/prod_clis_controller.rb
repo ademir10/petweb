@@ -11,6 +11,13 @@ class ProdClisController < ApplicationController
   # POST /prod_clis.json
   def create
    @client = Client.find(params[:client_id])
+   
+   #verifica se selecionou o produto primeiro
+   if prod_cli_params[:product_id].blank?
+      flash[:warning] = 'Você esqueceu de selecionar o produto!'
+      redirect_to client_path(@client) and return
+    end
+   
     #verifica se já existe o mesmo item adicionado na venda
     check_product = ProdCli.where(client_id: @client.id, product_id: prod_cli_params[:product_id])
     if check_product.present?

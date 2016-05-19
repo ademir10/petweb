@@ -32,7 +32,7 @@
   <div class="form-group">
     <%= f.label 'fornecedor', :class => 'control-label col-lg-2' %>
     <div class="col-lg-6">
-    <%= f.collection_select(:supplier_id, @suppliers, :id, :name, {include_blank: 'Selecione:'},:class => 'form-control') %>
+    <%= f.collection_select(:supplier_id, @suppliers, :id, :company, {include_blank: 'Selecione:'},:class => 'form-control') %>
   </div>
     <%=f.error_span(:supplier_id) %>
   </div>

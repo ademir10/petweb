@@ -1,0 +1,24 @@
+<p>
+<%= form_for(@intowel, url: baixar_intowel_path, method: :post) do |f| %>
+  
+    <div class="col-lg-3">
+    <% if @intowel.status == 'FINALIZADA' %>	
+    	<%= f.select(:form_receipt, options_for_select([["BOLETO"],["CHEQUE"], ["CRÉDITO"],["DÉBITO"],["DINHEIRO"]], @intowel.form_receipt), {include_blank: 'Forma de pagamento'}, readonly: true, :class => 'form-control') %>
+    <% else %>
+    	<%= f.select(:form_receipt, options_for_select([["BOLETO"],["CHEQUE"], ["CRÉDITO"],["DÉBITO"],["DINHEIRO"]], @intowel.form_receipt), {include_blank: 'Forma de pagamento'}, :class => 'form-control') %>
+    <% end %>
+    </div>
+    <%= f.error_span(:form_receipt) %>
+    
+    <div class="col-lg-2">
+    <% if @intowel.status == 'FINALIZADA' %>	
+      <%= f.select(:installments, options_for_select([["1"],["2"], ["3"],["4"],["5"],["6"], ["7"],["8"],["9"],["10"],["11"],["12"]], @intowel.installments), {include_blank: 'Parcelas'}, disabled: true, :class => 'form-control') %>
+    <% else %>
+      <%= f.select(:installments, options_for_select([["1"],["2"], ["3"],["4"],["5"],["6"], ["7"],["8"],["9"],["10"],["11"],["12"]], @intowel.installments), {include_blank: 'Parcelas'}, :class => 'form-control') %>
+    <% end %>
+    </div>
+    <%= f.error_span(:installments) %>
+     
+ <%= f.submit 'Finalizar ', :class => 'btn btn-warning' %>
+
+<% end %>

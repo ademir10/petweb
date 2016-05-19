@@ -1,0 +1,50 @@
+<%- model_class = Intowel -%>
+<div class="page-header">
+  <h1>Entrada de toalhas Nº<font color="red"><%= @intowel.id %></font></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name('cliente') %>:</strong></dt>
+  <dd><%= @intowel.client.company %></dd>
+  <dt><strong><%= model_class.human_attribute_name('endereço') %>:</strong></dt>
+  <dd><%= @intowel.client.address %>&nbsp;
+  <strong><%= model_class.human_attribute_name('bairro') %>:</strong>
+  <%= @intowel.client.neighborhood %><strong>&nbsp;
+  <%= model_class.human_attribute_name('cidade') %>:</strong>
+  <%= @intowel.client.cidade.nome %>&nbsp;
+  <strong><%= model_class.human_attribute_name('UF') %>:</strong>
+  <%= @intowel.client.estado.sigla %>&nbsp;
+  <strong><%= model_class.human_attribute_name('Cep') %>:</strong>
+  <%= @intowel.client.cep %>&nbsp;</dd>
+  <dt><strong><%= model_class.human_attribute_name('Cnpj') %>:</strong></dt>
+  <dd><%= @intowel.client.cnpj %>&nbsp;
+  <strong><%= model_class.human_attribute_name('fone') %>:</strong>
+  <%= @intowel.client.phone %>&nbsp;
+  <strong><%= model_class.human_attribute_name('celular') %>:</strong>
+  <%= @intowel.client.cellphone %>&nbsp;
+  <strong><%= model_class.human_attribute_name('email') %>:</strong>
+  <%= @intowel.client.email %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              intowels_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_intowel_path(@intowel), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              intowel_path(@intowel),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+              
+<!-- EXIBE A QUANTIDADE DE ITENS NA O.S -->
+ <div class="page-header">
+  	<h2><%= @intowel.items.count %> Itens / Total geral R$: <%= @total_items %> </h2>
+ </div>
+    <!-- EXIBE OS ITENS NA O.S --> 
+ <%= render "items/item" %>
+ <%= render "items/form" %>
+ 
+  <%= render "intowels/form_receipt" %>  
+ 
+<p>
+              
