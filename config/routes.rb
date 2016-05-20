@@ -1,13 +1,20 @@
 Rails.application.routes.draw do
-
-  resources :receipts
+  
+  resources :outtowels do
+   member do
+     post 'baixar'
+   end 
+    resources :itemouts
+  end
+ 
    resources :intowels do
    member do
      post 'baixar'
    end 
     resources :items
   end
- 
+  
+  resources :receipts
   resources :payments
   resources :products
   resources :suppliers
@@ -22,7 +29,11 @@ Rails.application.routes.draw do
   resources :users
       
   root 'pages#index'
+  #acerto de clientes por periodo
+  get 'reckoning', to: 'intowels#reckoning'
   
+  post 'acerto', to: 'intowels#acerto'
+ 
   #rota para consultar produto selecionado no combobox na Ordem de serviço
   get 'consulta_prod', to: 'intowels#consulta_prod'
   

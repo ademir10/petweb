@@ -1,52 +1,51 @@
-<%- model_class = Intowel -%>
+<%- model_class = Outtowel -%>
 <div class="page-header">
-  <h1>Entrada de toalhas Nº<font color="red"><%= @intowel.id %></font></h1>
+  <h1>Dados da saida de toalhas</h1>
 </div>
 
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name('cliente') %>:</strong></dt>
-  <dd><%= @intowel.client.company %></dd>
+  <dd><%= @outtowel.client.company %></dd>
   <dt><strong><%= model_class.human_attribute_name('endereço') %>:</strong></dt>
-  <dd><%= @intowel.client.address %>&nbsp;
+  <dd><%= @outtowel.client.address %>&nbsp;
   <strong><%= model_class.human_attribute_name('bairro') %>:</strong>
-  <%= @intowel.client.neighborhood %><strong>&nbsp;
+  <%= @outtowel.client.neighborhood %><strong>&nbsp;
   <%= model_class.human_attribute_name('cidade') %>:</strong>
-  <%= @intowel.client.cidade.nome %>&nbsp;
+  <%= @outtowel.client.cidade.nome %>&nbsp;
   <strong><%= model_class.human_attribute_name('UF') %>:</strong>
-  <%= @intowel.client.estado.sigla %>&nbsp;
+  <%= @outtowel.client.estado.sigla %>&nbsp;
   <strong><%= model_class.human_attribute_name('Cep') %>:</strong>
-  <%= @intowel.client.cep %>&nbsp;</dd>
+  <%= @outtowel.client.cep %>&nbsp;</dd>
   <dt><strong><%= model_class.human_attribute_name('Cnpj') %>:</strong></dt>
-  <dd><%= @intowel.client.cnpj %>&nbsp;
+  <dd><%= @outtowel.client.cnpj %>&nbsp;
   <strong><%= model_class.human_attribute_name('fone') %>:</strong>
-  <%= @intowel.client.phone %>&nbsp;
+  <%= @outtowel.client.phone %>&nbsp;
   <strong><%= model_class.human_attribute_name('celular') %>:</strong>
-  <%= @intowel.client.cellphone %>&nbsp;
+  <%= @outtowel.client.cellphone %>&nbsp;
   <strong><%= model_class.human_attribute_name('email') %>:</strong>
-  <%= @intowel.client.email %></dd>
+  <%= @outtowel.client.email %></dd>
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
-              intowels_path, :class => 'btn btn-default'  %>
-<% if @intowel.status == 'ABERTA' %>
+              outtowels_path, :class => 'btn btn-default'  %>
+<% if @outtowel.status == 'ABERTA' %>              
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_intowel_path(@intowel), :class => 'btn btn-default' %>
+              edit_outtowel_path(@outtowel), :class => 'btn btn-default' %>
 <% end %>              
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              intowel_path(@intowel),
+              outtowel_path(@outtowel),
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' %>
-              
+
 <!-- EXIBE A QUANTIDADE DE ITENS NA O.S -->
  <div class="page-header">
-  	<h2><%= @intowel.items.count %> Itens / Total geral R$: <%= @total_items %> </h2>
+  	<h2><%= @outtowel.itemouts.count %> Itens</h2>
  </div>
     <!-- EXIBE OS ITENS NA O.S --> 
- <%= render "items/item" %>
- <%= render "items/form" %>
+ <%= render "itemouts/item" %>
+ <%= render "itemouts/form" %>
  
-  <%= render "intowels/form_receipt" %>  
+  <%= render "outtowels/form_receipt" %>  
  
-<p>
-              
+<p>              

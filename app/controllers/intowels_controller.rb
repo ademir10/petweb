@@ -1,9 +1,64 @@
 class IntowelsController < ApplicationController
   before_action :set_intowel, only: [:show, :edit, :update, :destroy]
-  before_action :show_client_name, only: [:new, :edit, :update, :create, :index, :report_intowel]
+  before_action :show_client_name, only: [:new, :edit, :update, :create, :index, :report_intowel,:reckoning]
   before_action :must_login
+  
+    
+  #acerto por periodo de clientes
+  def acerto
+   #é obrigátorio informar o cliente
+    if params[:client_id].blank?
+      flash[:warning] = 'Você não informou o cliente, portanto não foi possivel efetuar o acerto, tente outra vez.'
+      redirect_to root_path
+    end
+  end
+  
+  #consulta de acertos
+  def reckoning
+    
+    if params[:client_id].present?
+      @client = Client.find(params[:client_id])
+    end
+ 
+     if params[:date1].blank?
+        params[:date1] = Date.today
+        @datainicial = Date.today
+       else
+        @datainicial = Date.strptime(params[:date1], '%Y-%m-%d').strftime("%d/%m/%Y")
+      end
 
-#relatório
+      if params[:date2].blank?
+        params[:date2] = Date.today
+      @datafinal = Date.today
+      else
+       @datafinal = Date.strptime(params[:date2], '%Y-%m-%d').strftime("%d/%m/%Y")
+      end
+                     
+          if params[:client_id].blank? && params[:date1].present? && params[:date2].present?
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:total_value)
+ 
+          elsif params[:client_id].present? && params[:date1].present? && params[:date2].present?
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:total_value)
+
+         
+          elsif params[:client_id].blank? && params[:date1].present? && params[:date2].present?
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:total_value)
+
+          elsif params[:client_id] && params[:date1] && params[:date2]
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at).where("client_id = ?", params[:client_id]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:total_value)
+           end
+  end
+  
+
+  #relatório
   def report_intowel
    
       if params[:date1].blank?
@@ -22,19 +77,23 @@ class IntowelsController < ApplicationController
                      
           if params[:client_id].blank? && params[:date1].present? && params[:date2].present?
              @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
              @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:total_value)
  
           elsif params[:client_id].present? && params[:date1].present? && params[:date2].present?
              @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
              @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:total_value)
 
          
           elsif params[:client_id].blank? && params[:date1].present? && params[:date2].present?
              @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
              @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:total_value)
 
           elsif params[:client_id] && params[:date1] && params[:date2]
              @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at).where("client_id = ?", params[:client_id]).order(:created_at)
+             @qnt_items = Intowel.select("intowels.id,items.qnt,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
              @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:total_value)
            end
   end
@@ -47,7 +106,7 @@ class IntowelsController < ApplicationController
     #verifica se foi adicionado algum item na Intowel
     @qnt_items = Item.where(intowel_id: @intowel.id).count
       if @qnt_items == 0
-        flash[:warning] = 'Selecione pelo menos 1 item!'
+        flash[:warning] = 'Adicione pelo menos 1 item!'
        redirect_to intowel_path(@intowel) and return 
       end
     
@@ -85,7 +144,7 @@ class IntowelsController < ApplicationController
          #renderiza a view para carregar o PDF dentro da pasta Layouts/reports
          @intowel = Intowel.find(params[:id])
          redirect_to root_path
-         flash[:success] = 'Entrada finalizada com sucesso! e ai o que vamos fazer agora ' + current_user.name + '?'
+         flash[:success] = 'Ok o que vamos fazer agora ' + current_user.name + '?'
          else
            
            #verifica a quantidade de parcelas e faz a divisão para enviar para o contas á receber
@@ -156,7 +215,7 @@ class IntowelsController < ApplicationController
                        
         #renderiza a view para carregar o PDF dentro da pasta Layouts/reports
          redirect_to root_path
-        flash[:success] = 'Entrada finalizada com sucesso! e ai o que vamos fazer agora ' + current_user.name + '?'
+        flash[:success] = 'Entrada finalizada e os dados foram enviados para o contas á receber! e ai o que vamos fazer agora ' + current_user.name + '?'
         end
       end
   end
@@ -181,14 +240,14 @@ class IntowelsController < ApplicationController
   def index
     check_client = Client.all
     if check_client.blank?
-      flash[:warning] = 'Não existe nenhum cliente cadastrado, portanto não será possivel gerar um orçamento ou Venda. Cadastre pelo menos 1 Cliente.'
+      flash[:warning] = 'Não existe nenhum cliente cadastrado, portanto não será possivel cadastrar entrada de toalhas. Cadastre pelo menos 1 Cliente.'
       redirect_to clients_path and return
     end
 
         
     check_product = Product.all
     if check_product.blank?
-      flash[:warning] = 'Não existe nenhum produto cadastrado, portanto não será possivel gerar um orçamento ou Venda. Cadastre pelo menos 1 Produto.'
+      flash[:warning] = 'Não existe nenhum produto cadastrado, portanto não será possivel cadastrar entrada de toalhas. Cadastre pelo menos 1 Produto.'
       redirect_to products_path and return
     end
     
@@ -249,6 +308,12 @@ class IntowelsController < ApplicationController
       @intowel.form_receipt = 'NÃO INFORMADO'
       @intowel.installments = '1'
       if @intowel.save
+      #inserindo no log de atividades
+        log = Loginfo.new(params[:loginfo])
+        log.employee = current_user.name
+        log.task = 'Cadastrou nova entrada de toalhas - Nº: ' + @intowel.id.to_s
+        log.save!  
+        
         format.html { redirect_to @intowel, notice: 'Entrada criada com sucesso.' }
         format.json { render :show, status: :created, location: @intowel }
       else
@@ -265,6 +330,11 @@ class IntowelsController < ApplicationController
   def update
     respond_to do |format|
       if @intowel.update(intowel_params)
+        #inserindo no log de atividades
+        log = Loginfo.new(params[:loginfo])
+        log.employee = current_user.name
+        log.task = 'Atualizou entrada de toalhas - Nº: ' + @intowel.id.to_s
+        log.save! 
         format.html { redirect_to @intowel, notice: 'Entrada atualizada com sucesso.' }
         format.json { render :show, status: :ok, location: @intowel }
       else
@@ -278,7 +348,11 @@ class IntowelsController < ApplicationController
   # DELETE /intowels/1.json
   def destroy
     @intowel.destroy
-    
+     #inserindo no log de atividades
+     log = Loginfo.new(params[:loginfo])
+     log.employee = current_user.name
+     log.task = 'Excluiu entrada de toalhas - Nº: ' + @intowel.id.to_s
+     log.save!
     Receipt.destroy_all(intowel_id: @intowel)
     respond_to do |format|
       format.html { redirect_to intowels_url, notice: 'Entrada excluida com sucesso.' }

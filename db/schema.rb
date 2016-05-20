@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520010434) do
+ActiveRecord::Schema.define(version: 20160520193535) do
 
   create_table "cidades", force: :cascade do |t|
     t.string   "nome"
@@ -70,6 +70,17 @@ ActiveRecord::Schema.define(version: 20160520010434) do
 
   add_index "intowels", ["client_id"], name: "index_intowels_on_client_id", using: :btree
 
+  create_table "itemouts", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "qnt"
+    t.integer  "outtowel_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "itemouts", ["outtowel_id"], name: "index_itemouts_on_outtowel_id", using: :btree
+  add_index "itemouts", ["product_id"], name: "index_itemouts_on_product_id", using: :btree
+
   create_table "items", force: :cascade do |t|
     t.integer  "product_id"
     t.integer  "qnt"
@@ -94,6 +105,15 @@ ActiveRecord::Schema.define(version: 20160520010434) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "outtowels", force: :cascade do |t|
+    t.integer  "client_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "status"
+  end
+
+  add_index "outtowels", ["client_id"], name: "index_outtowels_on_client_id", using: :btree
 
   create_table "payments", force: :cascade do |t|
     t.string   "doc_number"
@@ -197,13 +217,17 @@ ActiveRecord::Schema.define(version: 20160520010434) do
     t.boolean  "rsale"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.boolean  "macerto"
   end
 
   add_foreign_key "clients", "cidades"
   add_foreign_key "clients", "estados"
   add_foreign_key "intowels", "clients"
+  add_foreign_key "itemouts", "outtowels"
+  add_foreign_key "itemouts", "products"
   add_foreign_key "items", "intowels"
   add_foreign_key "items", "products"
+  add_foreign_key "outtowels", "clients"
   add_foreign_key "payments", "suppliers"
   add_foreign_key "prod_clis", "clients"
   add_foreign_key "prod_clis", "products"

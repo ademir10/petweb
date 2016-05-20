@@ -89,6 +89,12 @@ class ReceiptsController < ApplicationController
             respond_to do |format|
             
             if @receipt.save
+            #inserindo no log de atividades
+            log = Loginfo.new(params[:loginfo])
+            log.employee = current_user.name
+            log.task = 'Cadastrou nova conta á receber - Nº doc: ' + receipt_params[:doc_number].to_s
+            log.save!
+              
               format.html { redirect_to @receipt, notice: 'Conta á receber criada com sucesso.' }
               format.json { render :show, status: :created, location: @receipt }
             else
@@ -158,6 +164,12 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
          
       if @receipt.update(receipt_params)
+      #inserindo no log de atividades
+      log = Loginfo.new(params[:loginfo])
+      log.employee = current_user.name
+      log.task = 'Atualizou conta á receber - Nº doc: ' + receipt_params[:doc_number].to_s
+      log.save!  
+        
         format.html { redirect_to @receipt, notice: 'Recebimento atualizado com sucesso.' }
         format.json { render :show, status: :ok, location: @receipt }
       else
@@ -171,6 +183,11 @@ class ReceiptsController < ApplicationController
   # DELETE /receipts/1.json
   def destroy
     @receipt.destroy
+    #inserindo no log de atividades
+        log = Loginfo.new(params[:loginfo])
+        log.employee = current_user.name
+        log.task = 'Excluiu conta á receber - Nº doc ' + @receipt.doc_number.to_s
+        log.save!
     respond_to do |format|
       format.html { redirect_to receipts_url, notice: 'Conta á receber excluida com sucesso.' }
       format.json { head :no_content }

@@ -31,7 +31,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">DsoftWeb</a>
+          <a class="navbar-brand"><%= link_to 'DsoftWeb', root_path %></a>
           <%= image_tag "logo.png" %>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -81,13 +81,17 @@
         	<li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Movimentações <span class="caret"></span></a>
                 <ul class="dropdown-menu">
+                	
+                <% if current_user.macerto == true %>	
+                <li><%= link_to "Acerto de clientes por periodo", reckoning_path %></li>
+                <% end %>
 
                 <% if current_user.min == true %>	
                 <li><%= link_to "Entrada de toalhas", intowels_path %></li>
                 <% end %>
                 
                 <% if current_user.mout == true %>	
-                <li><%= link_to "Saida de toalhas", '#' %></li>
+                <li><%= link_to "Saida de toalhas", outtowels_path %></li>
                 <% end %>
                 
                 <% if current_user.mlog == true %>	

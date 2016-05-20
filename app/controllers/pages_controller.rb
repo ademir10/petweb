@@ -3,7 +3,14 @@ class PagesController < ApplicationController
 
   def index
     @date = DateTime.now.year
-   
+    
+    #verifica se tem contas á pagar vencendo hoje
+    @payments = Payment.where('due_date <= ?', Date.today).where(status: 'Á PAGAR').order(:due_date)
+    @total_payments = Payment.where('due_date <= ?', Date.today).where(status: 'Á PAGAR').sum(:value_doc)
+    
+    #verifica se tem contas á receber vencendo hoje
+    @receipts = Receipt.where('due_date <= ?', Date.today).where(status: 'Á RECEBER').order(:due_date)
+    @total_receipts = Receipt.where('due_date <= ?', Date.today).where(status: 'Á RECEBER').sum(:value_doc)
   end
   
   #grafico anual de vendas por categoria

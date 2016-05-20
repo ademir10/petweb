@@ -1,0 +1,26 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th> <%= 'produto' %></th>
+      <th><%= 'qnt' %></th>
+            
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      
+    </tr>
+  </thead>
+  <tbody>
+ 
+ 	<% @outtowel.itemouts.each do |itemouts| %>
+        <tr>
+        <td><%= itemouts.product.name %></td>
+        <td><%= itemouts.qnt %></td>
+                        
+	      		<td><%= link_to t('.destroy', :default => t("helpers.links.destroy")), [itemouts.outtowel, itemouts], :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs btn-danger' %>
+		        </td>
+      </tr>
+      <% end %>
+       </tbody>
+       
+   </table>
+
+

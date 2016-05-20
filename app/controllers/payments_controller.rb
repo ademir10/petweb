@@ -89,7 +89,7 @@ class PaymentsController < ApplicationController
     @qnt_parcela = payment_params[:installments].to_i
     
     #verifica se foi informada a forma de pagamento na baixa
-    if payment_params[:form_payment].blank?
+    if payment_params[:status] == 'PAGA' && payment_params[:form_payment].blank?
       flash[:warning] = 'Selecione uma forma de Pagamento!'
       redirect_to new_payment_path and return
     end
@@ -112,7 +112,7 @@ class PaymentsController < ApplicationController
     
             respond_to do |format|
               if @payment.save
-                #inserindo no log de atividades
+        #inserindo no log de atividades
         log = Loginfo.new(params[:loginfo])
         log.employee = current_user.name
         log.task = 'Cadastrou nova conta á pagar - Nº doc: ' + payment_params[:doc_number].to_s

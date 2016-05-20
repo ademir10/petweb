@@ -1,0 +1,113 @@
+  
+  <!-- CSS PARA REMOVER O BOTÃO IMPRIMIR NA VIEW DE IMPRESSÃO -->
+  <style type="text/css">
+	@media print {
+    #printbtn {
+        display :  none;
+    }
+}
+</style>
+	
+	
+<%- model_class = Intowel -%>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+<%= image_tag "header.png", :height=>"100%", :width=>"100%" %>
+
+
+<br /><button type="button" id ="printbtn" class="btn btn-success", onclick ="window.print();return false;">Imprimir</button>
+<%= link_to "Voltar", outtowels_path, :class => 'btn btn-default', id: 'printbtn' %>
+
+    <h1 class="panel-title" align="right">Saida de toalhas Nº <font color="red"><%= @outtowel.id %></font></h1>
+  </div><!-- fim .panel-heading -->
+  <div class="panel-body">
+  <dl class="dl-horizontal">
+  <strong><%= model_class.human_attribute_name('cliente') %>:</strong>
+  &nbsp;<%= @outtowel.client.company %><br />
+  <strong><%= model_class.human_attribute_name('endereço') %>:</strong>
+  &nbsp;<%= @outtowel.client.address %>&nbsp;
+  <strong><%= model_class.human_attribute_name('bairro') %>:</strong>
+  &nbsp;<%= @outtowel.client.neighborhood %><strong><br />
+  <%= model_class.human_attribute_name('cidade') %>:</strong>
+  &nbsp;<%= @outtowel.client.cidade.nome %>&nbsp;
+  <strong><%= model_class.human_attribute_name('UF') %>:</strong>
+  &nbsp;<%= @outtowel.client.estado.sigla %>&nbsp;
+  <strong><%= model_class.human_attribute_name('Cep') %>:</strong>
+  &nbsp;<%= @outtowel.client.cep %><br />
+  <strong><%= model_class.human_attribute_name('Cpf / Cnpj') %>:</strong>
+  &nbsp;<%= @outtowel.client.cnpj %>&nbsp;
+  <strong><%= model_class.human_attribute_name('fone') %>:</strong>
+  &nbsp;<%= @outtowel.client.phone %><br />
+  <strong><%= model_class.human_attribute_name('celular') %>:</strong>
+  &nbsp;<%= @outtowel.client.cellphone %>&nbsp;
+  <strong><%= model_class.human_attribute_name('email') %>:</strong>
+  <%= @outtowel.client.email %>  
+  </dd>
+  </dl>
+ </div><!-- fim .panel-body -->
+ 
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th> <%= 'Descrição do produto' %></th>
+      <th><%= 'Quantidade' %></th>
+          
+    </tr>
+  </thead>
+  <tbody>
+ 
+ 	<% @outtowel.itemouts.each do |itemout| %>
+        <tr>
+        <td><%= itemout.product.name %></td>
+        <td><%= itemout.qnt %></td>
+        </tr>
+      <% end %>
+       </tbody>
+      
+   </table>
+  </div><!-- fim .panel -->
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+	<h1 class="panel-title">Comprovante de entrega</h1>
+	  </div><!-- fim .panel-heading -->
+	  <div class="panel-body">
+	
+	<dl class="dl-horizontal">
+	
+	<h4>
+	Eu ________________________, declaro ter recebido <%= @qnt_itemout %> toalhas<p></p>
+	de, Clear Express - Locação de toalhas para Pet Shops.<p></p>
+	Referente a Saida de toalhas Nº <%= @outtowel.id %>
+	<br>
+	<br>
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;___________________________<p />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= @outtowel.client.company %>
+	</h4> 
+	 
+	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;São Paulo, <%= DateTime.now.strftime("%d/%m/%Y") %> 
+	<br />
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<h4>Clear Express | Locação de toalhas para Pet Shops.</h4>
+	<p> 
+	</dl>
+	  </div><!-- fim .panel-body -->
+	</div><!-- fim .panel -->
+
+
+	
+  </div>
+  </div>
+  
+ 

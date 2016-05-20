@@ -13,7 +13,10 @@
    		<p><a class="btn btn-primary btn-lg pull-right" href="http://www.ddti.com.br" role="button">Nosso site &raquo;</a></p>
       </div>
 
-<% else %> 
+<% else %>
+
+<!-- SE NÃO TIVER NADA DE CONTAS Á PAGAR E RECEBER -->
+<% if @payments.blank? && @receipts.blank? %>
 <div style="background: url('images/intro.jpg')no-repeat center; height: 400px;
     background-size: 100% 100%;
     -moz-background-size: 100% 100%;
@@ -21,6 +24,76 @@
     -o-background-size: 100% 100%;
     color: #FFF;" class="jumbotron">
     </div>
+<% else %>
+<div style="background: url('images/mini_intro.jpg')no-repeat center; height: 200px;
+    background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -webkit-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    color: #FFF;" class="jumbotron">
+    </div>    
 <% end %> 
  
+<!-- se tiver contas á pagar em aberto ele informa -->
+<% if @payments.present? && current_user.fpag %>  
+  <h4>Temos Contas á Pagar pendentes!</h4>
+   <table class="table table-striped">
+  <thead>
+    <tr>
+    <th>Nº docto</th>
+    <th>fornecedor</th> 
+    <th>vencto</th>
+    <th>valor R$</th>
+    <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payments.each do |payment| %>
+   <tr>
+        <td><%= link_to payment.doc_number, payment_path(payment) %></td>
+        <td><%= payment.supplier.name %></td>
+        <td><%= payment.due_date %></td>
+        <td><%= payment.value_doc %></td>
+        <td>
+    <%= link_to 'Editar / Baixar', edit_payment_path(payment), :class => 'btn btn-default btn-xs' %>
+   </tr>
+    <% end %>
+  </tbody>
+</table>
+Total R$: <b><%= @total_payments %></b>  
+<p>   
+<% end %>    
+<!-- AQUI COMEÇA O CONTAS Á RECEBER -->
+<% if @receipts.present? && current_user.frec %>
+<hr>	
+<h4>Temos Contas á Receber pendentes!</h4>
+<table class="table table-striped">
+  <thead>
+   <tr>
+   <th>Nº doc</th>
+   <th>cliente</th>
+   <th>data vencto</th>
+   <th>Doc R$</th>
+   <th><%=t '.actions', :default => t("helpers.actions") %></th>
+   </tr>
+  </thead>
+  <tbody>
+    <% @receipts.each do |receipt| %>
+      <tr>
+      <td><%= link_to receipt.doc_number, receipt_path(receipt) %></td>
+      <td><%= receipt.client.name %></td>
+      <td><%= receipt.due_date %></td>
+      <td><%= receipt.value_doc %></td>
+      <td>
+    <%= link_to 'Editar / Baixar', edit_receipt_path(receipt), :class => 'btn btn-default btn-xs' %>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+Total R$: <b><%= @total_receipts %></b>
+<% end %> 
+
+ 
 <p>&copy; <%= @date %> - D&D Support Service - Consultoria em T.I.</p>
+<% end %>
