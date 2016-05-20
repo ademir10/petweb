@@ -18,6 +18,12 @@
     <% end %>
     </div>
     <%= f.error_span(:installments) %>
+    &nbsp;
+    <% if @intowel.status == 'ABERTA' %>
+    <%= f.check_box :status %>&nbsp;<%= f.label "baixa automática" %>
+    <% else %>
+    <%= f.check_box :status, disabled: true %>&nbsp;<%= f.label "baixa automática" %>
+    <% end %>
      
  <%= f.submit 'Finalizar ', :class => 'btn btn-warning' %>
 

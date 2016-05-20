@@ -103,7 +103,7 @@
                 <% end %>
                 
                 <% if current_user.frec == true %>	
-                <li><%= link_to "Contas á receber", '#' %></li>
+                <li><%= link_to "Contas á receber", receipts_path %></li>
                 <% end %>
                                                          
                 <!--
@@ -130,13 +130,23 @@
                 <% end %>
                 
                 <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Movimentações</li>
+                <%if current_user.min == true %>
+                <li><%= link_to "Entrada de toalhas", report_intowel_path %></li>
+                <% end %>
+                
+                <%if current_user.min == true %>
+                <li><%= link_to "Saida de toalhas", '#' %></li>
+                <% end %>
+                
+                <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Financeiro</li>
                 <%if current_user.rpag == true %>
                 <li><%= link_to "Contas á Pagar", report_payment_path %></li>
                 <% end %>
                 
                 <%if current_user.rrec == true %>
-                <li><%= link_to "Contas á Receber", '#' %></li>
+                <li><%= link_to "Contas á Receber", report_receipt_path %></li>
                 <% end %>
                 
                 <li role="separator" class="divider"></li>

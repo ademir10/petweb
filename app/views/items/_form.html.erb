@@ -102,11 +102,11 @@ $('#quant').change(function(){
     </div>
     	
 	<div class="col-lg-2">
-	<%= f.text_field :sale_value, class: "form-control", placeholder: "Val unitário R$", disabled: true, id: 'val_unit' %>
+	<%= f.text_field :sale_value, class: "form-control", placeholder: "Val unitário R$", read: 'only', id: 'val_unit' %>
 	</div>
 	
 	<div class="col-lg-2">
-	<%= f.text_field :total_value, class: "form-control", placeholder: "Val total R$",disabled: true, id: 'val_total' %>
+	<%= f.text_field :total_value, class: "form-control", placeholder: "Val total R$", read: 'only', id: 'val_total' %>
 	</div>
 	
     <%= f.submit 'Adicionar', class: 'btn btn-primary' %>

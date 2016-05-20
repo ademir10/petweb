@@ -20,24 +20,21 @@
 <br />
 <%= image_tag "logo_mini.png" %>
 
-  <h2>Relatório geral de Contas á Pagar</h2>
+  <h2>Relatório geral de Contas á receber</h2>
   
   Periodo: <%= @datainicial %> até <%=@datafinal %>
   
-  
-  <%= form_tag(report_payment_path, method: :get) do %>
-			
+  <%= form_tag(report_receipt_path, method: :get) do %>
   <div class="form-group">			  
 		<div class="row">
 			  <div class="col-lg-3">		
-		<%= select_tag(:supplier, options_from_collection_for_select(@suppliers, "id", "name"), include_blank: 'Selecione o fornecedor:', class: 'form-control', id: 'printbtn') %>			  	
+		<%= select_tag(:client, options_from_collection_for_select(@clients, "id", "company"), include_blank: 'Selecione o cliente', class: 'form-control', id: 'printbtn') %>			  	
 		</div>
 		</div>	
-  
 	<div class="form-group">
 		<div class="row">
 			  <div class="col-lg-3">
-			  <%= select_tag(:tipo_consulta, options_for_select([['Á PAGAR', 'Á PAGAR'], ['PAGAS', 'PAGA']]), include_blank: 'Selecione:', class: 'form-control', id: 'printbtn')%>
+			  <%= select_tag(:tipo_consulta, options_for_select([['Á RECEBER', 'Á RECEBER'], ['RECEBIDAS', 'RECEBIDA']]), include_blank: 'Selecione:', class: 'form-control', id: 'printbtn')%>
 			</div>
 			</div>
 		<div class="form-group">			  
@@ -50,22 +47,21 @@
 		<br />	
 		<%= submit_tag "Consultar", class: 'btn btn-success', id: 'printbtn' %>
 <% end %>
+  
+    <button type="button" id ="printbtn" class="btn btn-success", onclick ="window.print();return false;">Imprimir</button>
 
-	<button type="button" id ="printbtn" class="btn btn-success", onclick ="window.print();return false;">Imprimir</button>
- 
- 
- <h3><font color="red"><%= flash_messages %></font></h3>
+
 
 <table class="table table-striped">
   <thead>
     <tr>
       
-      <th><%= model_class.human_attribute_name('Nº docto') %></th>
+      <th><%= model_class.human_attribute_name('Nº doc') %></th>
       <th><%= model_class.human_attribute_name('tipo') %></th>
-      <th><%= model_class.human_attribute_name('fornecedor') %></th>
+      <th><%= model_class.human_attribute_name('cliente') %></th>
       <th><%= model_class.human_attribute_name('descrição') %></th>
       <th><%= model_class.human_attribute_name('vencto') %></th>
-      <th><%= model_class.human_attribute_name('pagto') %></th>
+      <th><%= model_class.human_attribute_name('Recebto') %></th>
       <th><%= model_class.human_attribute_name('parcelas') %></th>
       <th><%= model_class.human_attribute_name('valor R$') %></th>
       <th><%= model_class.human_attribute_name('status') %></th>
@@ -74,24 +70,23 @@
     </tr>
   </thead>
   <tbody>
-    <% @payments.each do |payment| %>
+    <% @receipts.each do |receipt| %>
       <tr>
         
-        <td><%= payment.doc_number %></td>
-        <td><%= payment.type_doc %></td>
-        <td><%= payment.supplier.name %></td>
-        <td><%= payment.description %></td>
-        <td><%= payment.due_date %></td>
-        <td><%= payment.payment_date %></td>
-        <td><%= payment.installments %></td>
-        <td><%= payment.value_doc %></td>
-        <td><%= payment.status %></td>
-               
+        <td><%= receipt.doc_number %></td>
+        <td><%= receipt.type_doc %></td>
+        <td><%= receipt.client.company %></td>
+        <td><%= receipt.description %></td>
+        <td><%= receipt.due_date %></td>
+        <td><%= receipt.receipt_date %></td>
+        <td><%= receipt.installments %></td>
+        <td><%= receipt.value_doc %></td>
+        <td><%= receipt.status %></td>
+        
         
       </tr>
     <% end %>
   </tbody>
 </table>
-
-Total R$: <b><%= @total_payments %></b>
+Total R$: <b><%= @total_receipts %></b>
 </div>

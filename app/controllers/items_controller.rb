@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :must_login
 
   # GET /items/1/edit
   def edit
@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
     check_item = Item.where(intowel_id: @intowel.id, product_id: item_params[:product_id])
     if check_item.present?
       flash[:warning] = 'Este item já foi adicionado!'
-      redirect_to invoice_path(@intowel) and return
+      redirect_to intowel_path(@intowel) and return
     end
          
       if item_params[:qnt].blank?
@@ -36,11 +36,10 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
+    @intowel = Intowel.find(params[:intowel_id])
+    @item = @intowel.items.find(params[:id])
     @item.destroy
-    respond_to do |format|
-      format.html { redirect_to items_url, notice: 'Item excluido com sucesso.' }
-      format.json { head :no_content }
-    end
+    redirect_to intowel_path(@intowel)
   end
 
   private

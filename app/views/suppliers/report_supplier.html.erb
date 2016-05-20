@@ -19,12 +19,10 @@
 <%- model_class = Supplier -%>
 <br />
 <%= image_tag "logo_mini.png" %>
-<div class="page-header">
+
   <h2>Relatório geral Fornecedores</h2>
   Gerado em: <%= Time.now.strftime("%d/%m/%Y %H:%M") %> <br />
   <button type="button" id ="printbtn" class="btn btn-success", onclick ="window.print();return false;">Imprimir</button>
-
-  </div>
 
 <table class="table table-striped">
   <thead>

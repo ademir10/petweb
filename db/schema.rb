@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160519142112) do
+ActiveRecord::Schema.define(version: 20160520010434) do
 
   create_table "cidades", force: :cascade do |t|
     t.string   "nome"
@@ -134,6 +134,24 @@ ActiveRecord::Schema.define(version: 20160519142112) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "receipts", force: :cascade do |t|
+    t.string   "doc_number"
+    t.string   "type_doc"
+    t.integer  "client_id"
+    t.string   "description"
+    t.date     "due_date"
+    t.date     "receipt_date"
+    t.integer  "installments"
+    t.string   "form_receipt"
+    t.string   "status"
+    t.integer  "intowel_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.decimal  "value_doc"
+  end
+
+  add_index "receipts", ["client_id"], name: "index_receipts_on_client_id", using: :btree
+
   create_table "suppliers", force: :cascade do |t|
     t.string   "company"
     t.string   "name"
@@ -189,6 +207,7 @@ ActiveRecord::Schema.define(version: 20160519142112) do
   add_foreign_key "payments", "suppliers"
   add_foreign_key "prod_clis", "clients"
   add_foreign_key "prod_clis", "products"
+  add_foreign_key "receipts", "clients"
   add_foreign_key "suppliers", "cidades"
   add_foreign_key "suppliers", "estados"
 end

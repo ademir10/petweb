@@ -1,8 +1,168 @@
 class IntowelsController < ApplicationController
   before_action :set_intowel, only: [:show, :edit, :update, :destroy]
-  before_action :show_client_name, only: [:new, :edit, :update, :create, :index, :report_invoice]
+  before_action :show_client_name, only: [:new, :edit, :update, :create, :index, :report_intowel]
   before_action :must_login
+
+#relatório
+  def report_intowel
+   
+      if params[:date1].blank?
+        params[:date1] = Date.today
+        @datainicial = Date.today
+       else
+        @datainicial = Date.strptime(params[:date1], '%Y-%m-%d').strftime("%d/%m/%Y")
+      end
+
+      if params[:date2].blank?
+        params[:date2] = Date.today
+      @datafinal = Date.today
+      else
+       @datafinal = Date.strptime(params[:date2], '%Y-%m-%d').strftime("%d/%m/%Y")
+      end
+                     
+          if params[:client_id].blank? && params[:date1].present? && params[:date2].present?
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:total_value)
+ 
+          elsif params[:client_id].present? && params[:date1].present? && params[:date2].present?
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).order(:created_at)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:total_value)
+
+         
+          elsif params[:client_id].blank? && params[:date1].present? && params[:date2].present?
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:total_value)
+
+          elsif params[:client_id] && params[:date1] && params[:date2]
+             @intowels = Intowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at).where("client_id = ?", params[:client_id]).order(:created_at)
+             @total_items = Intowel.select("intowels.id,items.total_value,intowels.created_at").joins(:items).where("intowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:total_value)
+           end
+  end
   
+  
+  #EFETUA A BAIXA DA INVOICE e envia os dados para o contas á Receber automaticamente gerando o PDF
+  def baixar
+    @intowel = Intowel.find(params[:id])
+    
+    #verifica se foi adicionado algum item na Intowel
+    @qnt_items = Item.where(intowel_id: @intowel.id).count
+      if @qnt_items == 0
+        flash[:warning] = 'Selecione pelo menos 1 item!'
+       redirect_to intowel_path(@intowel) and return 
+      end
+    
+    #verifica se foi informada a forma de pagamento
+    if intowel_params[:form_receipt].blank?
+      flash[:warning] = 'Selecione uma forma de pagamento válida!'
+      redirect_to intowel_path(@intowel) and return
+    end
+           
+    #FAZENDO A SOMA DE TODOS OS ITENS PARA EXIBIR NA IMPRESSÃO 
+    @total_items = Item.where(intowel_id: @intowel.id).sum(:total_value)
+                     
+    # SE JÁ FOI RECEBIDA A O.S. não enviará para o contar á Receber
+     if @intowel.status == 'RECEBIDA'
+              
+        #render layout: 'reports/rpt_intowel'
+        redirect_to root_path
+        flash[:success] = 'E ai o que vamos fazer agora ' + current_user.name + '?'
+       else
+       #verifica se foi marcada a baixa automática       
+       if intowel_params[:status] == '1'
+       @novostatus = 'RECEBIDA'
+       else
+       @novostatus = 'Á RECEBER'  
+       end
+      
+       Intowel.update(@intowel.id, status: @novostatus, form_receipt: intowel_params[:form_receipt], installments: intowel_params[:installments])
+       
+       #FAZENDO A SOMA DE TODOS OS ITENS PARA JOGAR NO CONTAS Á RECEBER
+       @total_items = Item.where(intowel_id: @intowel.id).sum(:total_value)
+       
+       #verifica se já foi enviado para o contas á receber
+              
+       if Receipt.exists?(intowel_id: @intowel.id)
+         #renderiza a view para carregar o PDF dentro da pasta Layouts/reports
+         @intowel = Intowel.find(params[:id])
+         redirect_to root_path
+         flash[:success] = 'Entrada finalizada com sucesso! e ai o que vamos fazer agora ' + current_user.name + '?'
+         else
+           
+           #verifica a quantidade de parcelas e faz a divisão para enviar para o contas á receber
+           @qnt_parcela = intowel_params[:installments].to_i
+           
+           #se tiver somente uma parcela é lançado uma vez só
+           if @qnt_parcela == 1
+                
+                #ENVIANDO PARA O CONTAS Á RECEBER
+                 cta_receber = Receipt.new(params[:receipt])
+                 cta_receber.doc_number = @intowel.id
+                 cta_receber.client_id = @intowel.client_id
+                 cta_receber.type_doc = "ENTRADA DE TOALHAS"
+                 cta_receber.description = 'Ref. Entrada de toalhas Nº: ' + params[:id].to_s
+                 cta_receber.value_doc = @total_items
+                 cta_receber.due_date = Date.today
+                 cta_receber.installments = intowel_params[:installments]
+                 #Verifica se foi marcado para fazer a baixa automática
+                 if intowel_params[:status] == '1'
+                 cta_receber.status = "RECEBIDA"
+                 cta_receber.receipt_date = Date.today
+                 else
+                 cta_receber.status = "Á RECEBER"  
+                 end
+                 cta_receber.intowel_id = @intowel.id
+                 cta_receber.form_receipt = intowel_params[:form_receipt]
+                 cta_receber.save!
+            #caso contrário é feito um loop para lançar parcela por parcela
+            else
+                if @qnt_parcela > 1
+                #@valor_total = Item.find_by[intowel_id: @intowel.id].sum(:total_value).to_f
+                @resultado = @total_items.to_f / @qnt_parcela
+                @resultado = (@resultado).round(2)
+                @data_vencto = Date.today
+                end
+                
+                    while @qnt_parcela > 0
+                          @conta_parc = @conta_parc.to_i + 1 
+                          @data_vencto = @data_vencto.to_date + 1.month 
+                     #inserindo cada parcela no contas á receber
+                     cta_receber = Receipt.new(params[:receipt])
+                     cta_receber.doc_number = @intowel.id
+                     cta_receber.client_id = @intowel.client_id
+                     cta_receber.type_doc = "O.S"
+                     cta_receber.description = 'Ref. Entrada de toalhas Nº: ' + @intowel.id.to_s + ' Parc. ' + @conta_parc.to_s
+                     cta_receber.value_doc = @resultado
+                     cta_receber.due_date = @data_vencto
+                     cta_receber.installments = intowel_params[:installments]
+                     #Verifica se foi marcado para fazer a baixa automática
+                     if intowel_params[:status] == '1'
+                     cta_receber.status = "RECEBIDA"
+                     cta_receber.receipt_date = Date.today
+                     else
+                     cta_receber.status = "Á RECEBER"  
+                     end
+                     cta_receber.intowel_id = @intowel.id
+                     cta_receber.form_receipt = intowel_params[:form_receipt]
+                     cta_receber.save!     
+                         
+                     @qnt_parcela = @qnt_parcela - 1
+                         
+                    end 
+             
+            end     
+        
+        #Atualiza a forma de pagamento  na visualização do form        
+        @intowel = Intowel.find(params[:id])         
+                       
+        #renderiza a view para carregar o PDF dentro da pasta Layouts/reports
+         redirect_to root_path
+        flash[:success] = 'Entrada finalizada com sucesso! e ai o que vamos fazer agora ' + current_user.name + '?'
+        end
+      end
+  end
+  
+
+ 
   #consultando os valores com base na quantidade e produto selecionado
   def consulta_prod
     #pega o id do produto com base no nome
@@ -118,6 +278,8 @@ class IntowelsController < ApplicationController
   # DELETE /intowels/1.json
   def destroy
     @intowel.destroy
+    
+    Receipt.destroy_all(intowel_id: @intowel)
     respond_to do |format|
       format.html { redirect_to intowels_url, notice: 'Entrada excluida com sucesso.' }
       format.json { head :no_content }
@@ -136,6 +298,6 @@ class IntowelsController < ApplicationController
     end
         #mostra o nome dos clientes ao invés do id
     def show_client_name
-      @clients = Client.order(:name)
+      @clients = Client.order(:company)
     end
 end

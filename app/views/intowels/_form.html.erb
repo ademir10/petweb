@@ -18,7 +18,7 @@
   <div class="form-group">
     <%= f.label 'cliente', :class => 'control-label col-lg-2' %>
     <div class="col-lg-4">
-      <%= f.collection_select(:client_id, @clients, :id, :name, {include_blank: 'Selecione o cliente:'},:class => 'form-control') %>
+      <%= f.collection_select(:client_id, @clients, :id, :company, {include_blank: 'Selecione o cliente:'},:class => 'form-control') %>
     </div>
     <%=f.error_span(:client_id) %>
   </div>
