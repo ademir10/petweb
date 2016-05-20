@@ -5,6 +5,16 @@
         display :  none;
     }
 }
+
+#printOnly {
+   display : none;
+}
+
+@media print {
+    #printOnly {
+       display : block;
+    }
+}
 </style>
 
 <!-- INSERI ESSA VERIFICAÇÃO DE AMBIENTE PRA CARREGAR OS PDF'S TANTO LOCALMENTE QUANTO NO HEROKU -->
@@ -14,12 +24,11 @@
 </style>
 <% end %>
 
-<%= image_tag "header.png", :height=>"100%", :width=>"100%" %>
+<%= image_tag "header.png", :height=>"100%", :width=>"100%", id: 'printOnly' %>
 <div class="container-fluid">
 
 <%- model_class = Client -%>
-
-  <h2>Extrato de consumo</h2>
+<h1>Extrato de consumo <%= image_tag 'question.png' %></h1>
   
   Periodo: <%= @datainicial %> até <%=@datafinal %><br />
   <% if @client.present? %>
