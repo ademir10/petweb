@@ -63,10 +63,14 @@ Rails.application.routes.draw do
   get 'report_product', to: 'products#report_product'
   #relatorio de contas a pagar
   get 'report_payment', to: 'payments#report_payment'
-    #para relatório de contas a receber
+  #para relatório de contas a receber
   get 'report_receipt', to: 'receipts#report_receipt'
-    #para relatório de entrada de toalhas
+  #para relatório de entrada de toalhas
   get 'report_intowel', to: 'intowels#report_intowel'
+  #para relatório de entrada de toalhas
+  get 'report_outtowel', to: 'outtowels#report_outtowel'
+  #dashboard de vendas
+  get 'sales_report', to: 'pages#sales_report'
   
       
   #para carregar a view informando que não pode excluir cadastro com relacionamento em outra table

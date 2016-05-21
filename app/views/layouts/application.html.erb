@@ -140,7 +140,7 @@
                 <% end %>
                 
                 <%if current_user.min == true %>
-                <li><%= link_to "Saida de toalhas", '#' %></li>
+                <li><%= link_to "Saida de toalhas", report_outtowel_path %></li>
                 <% end %>
                 
                 <li role="separator" class="divider"></li>
@@ -156,7 +156,7 @@
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Dashboard</li>
                 <%if current_user.rsale == true %>
-                <li><%= link_to "Gráfico anual de vendas", '#' %></li>
+                <li><%= link_to "Gráfico anual de vendas", sales_report_path %></li>
                 <% end %>
                                                                
               </ul>

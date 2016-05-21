@@ -51,7 +51,7 @@
     <% @payments.each do |payment| %>
    <tr>
         <td><%= link_to payment.doc_number, payment_path(payment) %></td>
-        <td><%= payment.supplier.name %></td>
+        <td><%= payment.supplier.company %></td>
         <td><%= payment.due_date %></td>
         <td><%= payment.value_doc %></td>
         <td>
@@ -81,7 +81,7 @@ Total R$: <b><%= @total_payments %></b>
     <% @receipts.each do |receipt| %>
       <tr>
       <td><%= link_to receipt.doc_number, receipt_path(receipt) %></td>
-      <td><%= receipt.client.name %></td>
+      <td><%= receipt.client.company %></td>
       <td><%= receipt.due_date %></td>
       <td><%= receipt.value_doc %></td>
       <td>

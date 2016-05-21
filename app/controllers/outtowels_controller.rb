@@ -22,24 +22,24 @@ class OuttowelsController < ApplicationController
                      
           if params[:client_id].blank? && params[:date1].present? && params[:date2].present?
              @outtowels = Outtowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
-             @qnt_items = Outtowel.select("outtowels.id,items.qnt,outtowels.created_at").joins(:items).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
+             @qnt_itemouts = Outtowel.select("outtowels.id,itemouts.qnt,outtowels.created_at").joins(:itemouts).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
               
           elsif params[:client_id].present? && params[:date1].present? && params[:date2].present?
              @outtowels = Outtowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).order(:created_at)
-             @qnt_items = Outtowel.select("outtowels.id,items.qnt,outtowels.created_at").joins(:items).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
+             @qnt_itemouts = Outtowel.select("outtowels.id,itemouts.qnt,outtowels.created_at").joins(:itemouts).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
                       
           elsif params[:client_id].blank? && params[:date1].present? && params[:date2].present?
              @outtowels = Outtowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at)
-             @qnt_items = Outtowel.select("outtowels.id,items.qnt,outtowels.created_at").joins(:items).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
+             @qnt_itemouts = Outtowel.select("outtowels.id,itemouts.qnt,outtowels.created_at").joins(:itemouts).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:qnt)
              
           elsif params[:client_id] && params[:date1] && params[:date2]
              @outtowels = Outtowel.where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:created_at).where("client_id = ?", params[:client_id]).order(:created_at)
-             @qnt_items = Outtowel.select("outtowels.id,items.qnt,outtowels.created_at").joins(:items).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
+             @qnt_itemouts = Outtowel.select("outtowels.id,itemouts.qnt,outtowels.created_at").joins(:itemouts).where("outtowels.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).where("client_id = ?", params[:client_id]).sum(:qnt)
              
           end
   end
   
-  #EFETUA A BAIXA DA INVOICE e envia os dados para o contas á Receber automaticamente gerando o PDF
+  #EFETUA A BAIXA DA ENTRADA DE TOALHAS e envia os dados para o contas á Receber automaticamente
   def baixar
     @outtowel = Outtowel.find(params[:id])
     

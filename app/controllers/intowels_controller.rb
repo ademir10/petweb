@@ -6,19 +6,47 @@ class IntowelsController < ApplicationController
     
   #acerto por periodo de clientes
   def acerto
+   
    #é obrigátorio informar o cliente
-    if params[:client_id].blank?
-      flash[:warning] = 'Você não informou o cliente, portanto não foi possivel efetuar o acerto, tente outra vez.'
-      redirect_to root_path
+    if params[:cliente].blank? || params[:data1].blank? || params[:data2].blank?
+      flash[:warning] = 'Você precisa selecionar o cliente, informar o periodo e consultar para poder efetivar a baixa em seguida!.'
+      redirect_to reckoning_path and return
     end
+    
+    check_intowel = Intowel.where(client_id: params[:cliente]).where(status: 'Á RECEBER').where('created_at::Date Between ? and ?', params[:data1],params[:data2]).count
+    if check_intowel >= 1
+    #atualizo para RECEBIDA todas as entradas com base no periodo informado
+    Intowel.where(client_id: params[:cliente]).where(status: 'Á RECEBER').where('created_at::Date Between ? and ?', params[:data1],params[:data2]).update_all(status: 'RECEBIDA')  
+    #atualizando todas as contas a receber do cliente informado e no periodo informado
+    Receipt.where(client_id: params[:cliente]).where(status: 'Á RECEBER').where('created_at::Date Between ? and ?', params[:data1],params[:data2]).update_all(status: 'RECEBIDA', receipt_date: Date.today)  
+    
+    #inserindo no log de atividades
+    log = Loginfo.new(params[:loginfo])
+    log.employee = current_user.name
+    log.task = 'Efetuou acerto por periodo do cliente de ID: ' + params[:cliente].to_s + ' e periodo de ' + params[:data1].to_s + ' até ' + params[:data2].to_s 
+    log.save!
+        
+     flash[:success] = 'Acerto realizado com sucesso!'
+     redirect_to reckoning_path and return
+     else
+     flash[:warning] = 'Não existem dados para serem baixados!'
+     redirect_to reckoning_path and return 
+    end 
+    
   end
   
   #consulta de acertos
   def reckoning
-    
+   
     if params[:client_id].present?
       @client = Client.find(params[:client_id])
+      #guardando os dados da consulta pra utilizar na baixa
+      @cliente_acerto = params[:client_id]
+      @data1_acerto = params[:date1]
+      @data2_acerto = params[:date2]
     end
+    
+    puts 'aqui está o cliente! ' + @cliente_acerto.to_s
  
      if params[:date1].blank?
         params[:date1] = Date.today

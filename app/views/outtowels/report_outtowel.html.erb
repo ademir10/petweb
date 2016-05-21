@@ -5,16 +5,6 @@
         display :  none;
     }
 }
-
-#printOnly {
-   display : none;
-}
-
-@media print {
-    #printOnly {
-       display : block;
-    }
-}
 </style>
 
 <!-- INSERI ESSA VERIFICAÇÃO DE AMBIENTE PRA CARREGAR OS PDF'S TANTO LOCALMENTE QUANTO NO HEROKU -->
@@ -24,18 +14,19 @@
 </style>
 <% end %>
 
-<%= image_tag "header.png", :height=>"100%", :width=>"100%", id: 'printOnly' %>
+<%= image_tag "logo_mini.png" %>
 <div class="container-fluid">
 
 <%- model_class = Client -%>
-<h1>Extrato de consumo <%= image_tag 'question.png' %></h1>
+
+  <h2>Relatório geral de Saida de toalhas</h2>
   
   Periodo: <%= @datainicial %> até <%=@datafinal %><br />
   <% if @client.present? %>
-  Cliente: <%= @client.company %>
+  Cliente: <%= @client.name %>
   <% end %>
-<%= form_tag(reckoning_path, method: :get) do %>
-			
+<%= form_tag(report_outtowel_path, method: :get) do %>
+
 <div class="form-group">			  
 		<div class="row">
 			  <div class="col-lg-3">		
@@ -59,23 +50,11 @@
 	</div>	
 		<br />	
 		<%= submit_tag "Consultar", class: 'btn btn-success', id: 'printbtn' %>
+<% end %>
 
-		<button type="button" id ="printbtn" class="btn btn-success", onclick ="window.print();return false;">Imprimir</button>
-		<% end %><p id="printbtn" />
-
-<% if @intowels.present? %>
-
-<%= form_tag(acerto_path, method: :post) do %>
-<!--pra guardar os dados da consulta e utilizar na hora da baixa -->
-<%= hidden_field_tag :cliente, @cliente_acerto %>
-<%= hidden_field_tag :data1, @data1_acerto %>
-<%= hidden_field_tag :data2, @data2_acerto %>
-<%= submit_tag "Efetuar baixa", data: { confirm: "Você confirma o acerto do cliente informado? este procedimento é irreversivel!" }, class: 'btn btn-danger', id: 'printbtn' %>
-<% end %>    
+	<button type="button" id ="printbtn" class="btn btn-success", onclick ="window.print();return false;">Imprimir</button>
+ 
 <hr />
-
-
-
 
 
 <table class="table table-striped">
@@ -85,31 +64,22 @@
       <th><%= model_class.human_attribute_name('cliente') %></th>
       <th><%= model_class.human_attribute_name('data') %></th>
       <th><%= model_class.human_attribute_name('qnt toalhas') %></th>
-      <th><%= model_class.human_attribute_name('val unit R$') %></th>
-      <th><%= model_class.human_attribute_name('total R$') %></th>
       <th><%= model_class.human_attribute_name('status') %></th>
       
     </tr>
   </thead>
   <tbody>
-    <% @intowels.each do |intowel| %>
+    <% @outtowels.each do |outtowel| %>
       <tr>
-        <td><%= intowel.id %></td>
-        <td><%= intowel.client.company %></td>
-        <td><%= intowel.created_at.strftime("%d/%m/%Y") %></td>
-        <td><%= intowel.items.sum(:qnt) %></td>
-        <td><%= intowel.items.sum(:sale_value) %></td>
-        <td><%= intowel.items.sum(:total_value) %></td>
-        <td><%= intowel.status %></td>
+        <td><%= outtowel.id %></td>
+        <td><%= outtowel.client.company %></td>
+        <td><%= outtowel.created_at.strftime("%d/%m/%Y") %></td>
+        <td><%= outtowel.itemouts.sum(:qnt) %></td>
+        <td><%= outtowel.status %></td>
         
       </tr>
     <% end %>
   </tbody>
 </table>
-<h4>Total geral de consumo: <b><%= @qnt_items %> toalhas</b></h4>
-<h4>Total geral: <b>R$<%= @total_items %></b></h4>
-<% else %>
-<h4 class="jumbotron">Não existem dados com base nos parametros informados.</h4>
-<% end %>
-<br />
-<br />
+Quantidade de toalhas: <b><%= @qnt_itemouts %></b><br />
+

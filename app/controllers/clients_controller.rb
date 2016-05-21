@@ -17,10 +17,10 @@ class ClientsController < ApplicationController
   def index
     @total_clients = Client.count
     if params[:search].blank? && params[:tipo_consulta].blank?
-          @clients = Client.limit(50).order(:company)
+          @clients = Client.limit(100).order(:company)
           
        elsif params[:search].blank? || params[:tipo_consulta].blank?
-          @clients = Client.limit(50).order(:company)   
+          @clients = Client.limit(100).order(:company)   
     
         elsif params[:search].present? && params[:tipo_consulta] == "1"
           @clients = Client.where("company like ?", "%#{params[:search]}%")
