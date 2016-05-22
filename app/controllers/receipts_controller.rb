@@ -35,7 +35,7 @@ class ReceiptsController < ApplicationController
         
         elsif params[:client].present? && params[:date1].present? && params[:date2].present? && params[:tipo_consulta] == 'Á RECEBER'
            @receipts = Receipt.where(client_id: params[:client]).where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'Á RECEBER').order(:due_date)
-           @total_receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'Á RECEBER').sum(:value_doc)   
+           @total_receipts = Receipt.where(client_id: params[:client]).where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'Á RECEBER').sum(:value_doc)   
 
         elsif params[:client].blank? && params[:date1].present? && params[:date2].present? && params[:tipo_consulta] == 'RECEBIDA'
            @receipts = Receipt.where("receipt_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'RECEBIDA').order(:due_date)
@@ -52,13 +52,19 @@ class ReceiptsController < ApplicationController
   end
 
   def index
-    @receipts = Receipt.includes(:client).where(due_date: Date.today).order(:due_date)
-      @total_receipts = Receipt.where(due_date: Date.today).sum(:value_doc)
+     if params[:date1].blank? && params[:date2].blank? && params[:tipo_consulta].blank?
+       @receipts = Receipt.includes(:client).where(due_date: Date.today).order(:due_date)
+        @total_receipts = Receipt.where(due_date: Date.today).sum(:value_doc)
       
-        if params[:date1] && params[:date2] && params[:tipo_consulta] == 'Á RECEBER'
+        elsif params[:date1].present? && params[:date2].present? && params[:tipo_consulta].blank?
+           @receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).order(:due_date)
+           @total_receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:value_doc)   
+        
+        elsif params[:date1].present? && params[:date2].present? && params[:tipo_consulta] == 'Á RECEBER'
            @receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'Á RECEBER').order(:due_date)
            @total_receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: params[:tipo_consulta]).sum(:value_doc)   
-        elsif params[:date1] && params[:date2] && params[:tipo_consulta] == 'RECEBIDA'
+          
+        elsif params[:date1].present? && params[:date2].present? && params[:tipo_consulta] == 'RECEBIDA'
            @receipts = Receipt.where("receipt_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'RECEBIDA').order(:due_date)
            @total_receipts = Receipt.where("receipt_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: params[:tipo_consulta]).sum(:value_doc)   
         end

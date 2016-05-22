@@ -5,7 +5,7 @@
 	<div class="form-group">
 		<div class="row">
 			  <div class="col-lg-3">
-			  <%= select_tag(:tipo_consulta, options_for_select([['Á RECEBER', 'Á RECEBER'], ['RECEBIDA', 'RECEBIDA']]), include_blank: 'Selecione:', class: 'form-control')%>
+			  <%= select_tag(:tipo_consulta, options_for_select([['Á RECEBER', 'Á RECEBER'], ['RECEBIDA', 'RECEBIDA']], params[:tipo_consulta]), include_blank: 'Selecione:', class: 'form-control')%>
 			</div>
 			</div>
 		<div class="form-group">			  

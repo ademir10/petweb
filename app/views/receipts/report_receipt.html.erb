@@ -28,18 +28,18 @@
   <div class="form-group">			  
 		<div class="row">
 			  <div class="col-lg-3">		
-		<%= select_tag(:client, options_from_collection_for_select(@clients, "id", "company"), include_blank: 'Selecione o cliente', class: 'form-control', id: 'printbtn') %>			  	
+		<%= select_tag(:client, options_from_collection_for_select(@clients, "id", "company", params[:client]), include_blank: 'Selecione o cliente', class: 'form-control', id: 'printbtn') %>			  	
 		</div>
 		</div>	
 	<div class="form-group">
 		<div class="row">
 			  <div class="col-lg-3">
-			  <%= select_tag(:tipo_consulta, options_for_select([['Á RECEBER', 'Á RECEBER'], ['RECEBIDAS', 'RECEBIDA']]), include_blank: 'Selecione:', class: 'form-control', id: 'printbtn')%>
+			  <%= select_tag(:tipo_consulta, options_for_select([['Á RECEBER', 'Á RECEBER'], ['RECEBIDAS', 'RECEBIDA']], params[:tipo_consulta]), include_blank: 'Selecione:', class: 'form-control', id: 'printbtn')%>
 			</div>
 			</div>
 		<div class="form-group">			  
 		<div class="row">
-			  <div class="col-lg-2">	  
+			  <div class="col-lg-3">	  
 		<%= date_field_tag(:date1, params[:date1], placeholder: 'data inicial', class: 'form-control', id: 'printbtn') %>
 		<%= date_field_tag(:date2, params[:date2], placeholder: 'data final', class: 'form-control', id: 'printbtn') %>	
 		</div>
