@@ -151,7 +151,7 @@ class IntowelsController < ApplicationController
      if @intowel.status == 'RECEBIDA'
               
         #render layout: 'reports/rpt_intowel'
-        redirect_to root_path
+        redirect_to intowels_path
         flash[:success] = 'E ai o que vamos fazer agora ' + current_user.name + '?'
        else
        #verifica se foi marcada a baixa automática       
@@ -171,7 +171,7 @@ class IntowelsController < ApplicationController
        if Receipt.exists?(intowel_id: @intowel.id)
          #renderiza a view para carregar o PDF dentro da pasta Layouts/reports
          @intowel = Intowel.find(params[:id])
-         redirect_to root_path
+         redirect_to intowels_path
          flash[:success] = 'Ok o que vamos fazer agora ' + current_user.name + '?'
          else
            
@@ -242,7 +242,7 @@ class IntowelsController < ApplicationController
         @intowel = Intowel.find(params[:id])         
                        
         #renderiza a view para carregar o PDF dentro da pasta Layouts/reports
-         redirect_to root_path
+         redirect_to intowels_path
         flash[:success] = 'Entrada finalizada e os dados foram enviados para o contas á receber! e ai o que vamos fazer agora ' + current_user.name + '?'
         end
       end
