@@ -17,7 +17,7 @@ class PagesController < ApplicationController
   def sales_report
     
     #total de vendas por mês
-      meeting_annual = Intowel.select("date_trunc( 'month', items.created_at ) as month, sum(items.total_value) as total_quantity").joins(:items).group('month').order('month')
+      meeting_annual = Intowel.select("date_trunc( 'month', items.created_at ) as month, sum(items.total_value) as total_quantity").joins(:items).where(status: 'RECEBIDA').group('month').order('month')
       meeting_by_month = []
       
       meeting_annual.each do |
