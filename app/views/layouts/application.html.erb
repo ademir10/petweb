@@ -125,6 +125,10 @@
                 <li><%= link_to "Clientes", report_client_path %></li>
                 <% end %>
                 
+                                <%if current_user.rcli == true %>
+                <li><%= link_to "Fechamento", report_fechamento_path %></li>
+                <% end %>
+                
                 <%if current_user.rsuplier == true %>
                 <li><%= link_to "Fornecedores", report_supplier_path %></li>
                 <% end %>

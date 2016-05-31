@@ -57,6 +57,8 @@ Rails.application.routes.draw do
   #relatórios
   #relatorio de clientes
   get 'report_client', to: 'clients#report_client'
+  #relatorio de fechamento
+  get 'report_fechamento', to: 'pages#report_fechamento'
   #relatorio de fornecedores
   get 'report_supplier', to: 'suppliers#report_supplier'
   #relatorio de produtos

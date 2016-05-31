@@ -1,5 +1,61 @@
 class PagesController < ApplicationController
-  #before_action :must_login
+ 
+    #aproveitando esse controller pra gerar o fechamento por periodo
+    def report_fechamento
+     
+      if params[:date1].blank?
+        params[:date1] = Date.today
+        @datainicial = Date.today
+       else
+        @datainicial = Date.strptime(params[:date1], '%Y-%m-%d').strftime("%d/%m/%Y")
+      end
+
+      if params[:date2].blank?
+        params[:date2] = Date.today
+      @datafinal = Date.today
+      else
+       @datafinal = Date.strptime(params[:date2], '%Y-%m-%d').strftime("%d/%m/%Y")
+      end    
+    
+            
+        if params[:date1] && params[:date2] && params[:tipo_consulta] == 'Á RECEBER \ Á PAGAR'
+           @total_receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'Á RECEBER').sum(:value_doc)   
+           @status_r = 'Á Receber'
+           
+           
+           @total_payments = Payment.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'Á PAGAR').sum(:value_doc)
+           @status_p = 'Á Pagar'
+        
+        elsif params[:date1] && params[:date2] && params[:tipo_consulta] == 'RECEBIDAS \ PAGAS'
+           @total_receipts = Receipt.where("receipt_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'RECEBIDA').sum(:value_doc)   
+           @status_r = 'Recebidas'
+           
+           @total_payments = Payment.where("payment_date BETWEEN ? AND ?", params[:date1], params[:date2]).where(status: 'PAGA').sum(:value_doc)
+           @status_p = 'Pagas'
+        
+        elsif params[:date1] && params[:date2] && params[:tipo_consulta].blank?
+          #flash[:waning] = 'Estes dados são com base no dia de hoje, o que temos á Pagar e á Receber, pelo fato de não ter selecionado uma opção.'
+           @total_receipts = Receipt.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:value_doc)   
+           @status_r = ''
+           
+           @total_payments = Payment.where("due_date BETWEEN ? AND ?", params[:date1], params[:date2]).sum(:value_doc)
+           @status_p = ''
+        end
+        
+        #fazendo o calculo de vendas - despesas
+        
+        @total_liquido = @total_receipts.to_f - @total_payments.to_f
+        @total_liquido = (@total_liquido).round(2)
+   
+      #se for por data   
+      #@total_items = Item.select("product_id, date(created_at) as created_at, sum(qnt) as qnt").where("created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).group("product_id,date(created_at)").order("created_at") 
+      
+      @total_items = Item.joins(:intowel).select("product_id, sum(qnt) as qnt, sum(total_value) as total_value_sale").where("items.created_at::date BETWEEN ? AND ?", params[:date1], params[:date2]).group("product_id") 
+            
+    #render layout: false
+
+    end
+
 
   def index
     @date = DateTime.now.year
